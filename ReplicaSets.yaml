@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: ReplicaSet       #Sets the desired number of pod replicas.
+metadata:
+  name: my-replicaset
+  namespace: default
+  labels:
+    app: myapp
+    tier: backend
+spec:
+  replicas: 3  # Number of pod replicas
+  selector:   # Ensures the ReplicaSet only manages pods with matching labels.
+    matchLabels:
+      app: myapp
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: myapp
+        tier: backend
+    spec:
+      containers:
+      - name: my-container
+        image: nginx:1.19
+        ports:
+        - containerPort: 80
+        resources:  # Resource requests and limits. Defines CPU and memory requests and limits.
+          requests:
+            cpu: "100m"
+            memory: "200Mi"
+          limits:
+            cpu: "500m"
+            memory: "500Mi"
+        livenessProbe:  # Health check for pod
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:    # Readiness probe for traffic readiness
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        env:  # Environment variables =>  Adds custom environment variables.
+        - name: ENVIRONMENT
+          value: "production"
+        - name: DEBUG_MODE
+          value: "false"
+      affinity:            # Node affinity, Configures node affinity to schedule pods on nodes with matching labels.
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: disktype
+                operator: In
+                values:
+                - ssd
+      tolerations:        # Allows the pod to be scheduled on tainted nodes.
+      - key: "dedicated"
+        operator: "Equal"
+        value: "backend"
+        effect: "NoSchedule"
+      - key: "environment"
+        operator: "Equal"
+        value: "production"
+        effect: "NoExecute"
+
+      imagePullSecrets:  # Secret for pulling private images
+      - name: my-registry-key
+      dnsPolicy: ClusterFirst  # DNS policy
+      restartPolicy: Always  # Restart policy
+
+      nodeSelector:      # Directs pods to nodes with specific labels.
+        cloud-provider: aws  # Node selector for specific cloud nodes
+
+      securityContext:  # Pod security context
+        runAsUser: 1000
+        runAsGroup: 3000
+        fsGroup: 2000
+
+      volumes:        # Define volumes, Specifies shared storage volumes within pods.
+      - name: shared-data
+        emptyDir: {}
+      - name: config-volume
+        configMap:
+          name: my-config-map
