@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: detailed-configmap  # Name of the ConfigMap
+  namespace: default        # Namespace where the ConfigMap will be deployed
+  labels:
+      app: example-app        # Label to identify the application this ConfigMap is associated with
+    environment: production  # Label indicating the environment (production, staging, etc.)
+  annotations:
+    description: "This is a detailed ConfigMap example used for storing configuration data"  # Additional metadata for description
+    version: "1.0.0"        # Version of the configuration for tracking purposes
+data:                       # Simple key-value pairs, storing basic app configuration
+  app.name: "MyApplication" # The name of the application
+  app.version: "1.2.3"      # Version number of the application
+  log.level: "debug"        # Logging level configuration
+  
+                            # Multi-line string containing a JSON object as configuration
+  app.config: |
+    {                       # JSON structure for application configuration
+      "logging": {
+        "level": "debug",    # Debug level logging
+        "enabled": true      # Enable logging
+      },
+      "features": {
+        "autoUpdate": true,  # Feature flag for automatic updates
+        "retryOnFailure": 3  # Retry attempts on failure
+      }
+    }
+  
+  # Example of a nested YAML-like structure as string data
+  db.config: |
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: db-config        # Database config map reference
+    data:
+      db.host: "localhost"    # Database host
+      db.port: "5432"        # Database port
+      db.user: "dbadmin"    # Database username
+      db.password: "password123"  # Database password (not recommended in ConfigMaps)
+  
+  # Typically sensitive data, but shown as an example (use Secrets instead)
+  app.secretKey: "SuperSecretKey123"  # Example of a secret key, use Secrets in production
+
+  # Example of a shell script that could be executed during app startup
+  app.setup.sh: |
+    #!/bin/bash                        # Start of shell script
+    echo "Setting up application..."  # Sample script action
+    ./init-script.sh                  # Calling another script
+  
+  # Environment variable declarations
+  envVariables: |
+    export DB_HOST=localhost  # Database host environment variable
+    export DB_PORT=5432  # Database port environment variable
+    export DB_USER=dbadmin  # Database user environment variable
+  
+  # A simple text file containing configuration options
+  settings.txt: |
+    # Example settings file
+    option1=true  # Setting option 1 to true
+    option2=false  # Setting option 2 to false
+    option3=42  # Setting option 3 to 42
+
+# Define volume mount example, showing how to use the ConfigMap in a Pod
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-app  # Name of the deployment for the app
+spec:
+  replicas: 1  # Number of replicas (pods) of the app
+  selector:
+    matchLabels:
+      app: example-app  # Match the app label to identify Pods
+  template:
+    metadata:
+      labels:
+        app: example-app  # Labels to apply to the Pods
+    spec:
+      containers:
+      - name: example-app-container  # Name of the container inside the Pod
+        image: my-app-image:latest  # Docker image for the container
+        volumeMounts:
+        - name: config-volume  # Volume reference (ConfigMap mount)
+          mountPath: /etc/config  # Path in the container to mount the config data
+          readOnly: true  # Ensure the volume is read-only
+      volumes:
+      - name: config-volume  # Volume definition
+        configMap:
+          name: detailed-configmap  # Reference to the ConfigMap to mount as a volume
