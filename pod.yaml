@@ -29,6 +29,8 @@ spec:
   serviceAccount: default
   serviceAccountName: default
   terminationGracePeriodSeconds: 30
+  
+  #Taints and Tolerations do not tell the pod to go to a particular node. Instead, they tell the node to only accept pods with certain tolerations.
   tolerations:
   - effect: NoExecute
     key: node.kubernetes.io/not-ready
@@ -38,6 +40,8 @@ spec:
     key: node.kubernetes.io/unreachable
     operator: Exists
     tolerationSeconds: 300
+  # Taints and Tolerations do not tell the pod to go to a particular node. Instead, they tell the node to only accept pods with certain tolerations.
+  
   volumes:
   - name: kube-api-access-6plkc
     projected:
