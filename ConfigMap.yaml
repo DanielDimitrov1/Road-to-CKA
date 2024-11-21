@@ -4,7 +4,7 @@ metadata:
   name: detailed-configmap  # Name of the ConfigMap
   namespace: default        # Namespace where the ConfigMap will be deployed
   labels:
-      app: example-app        # Label to identify the application this ConfigMap is associated with
+    app: example-app        # Label to identify the application this ConfigMap is associated with
     environment: production  # Label indicating the environment (production, staging, etc.)
   annotations:
     description: "This is a detailed ConfigMap example used for storing configuration data"  # Additional metadata for description
