@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-nodeport-service  # Name of the Service
+  labels:
+    app: myapp                  # Label to identify the application
+spec:
+  type: NodePort                # Service type to expose the application via a NodePort
+  selector:
+    app: myapp                  # Selector to target Pods with this label
+  ports:
+    - protocol: TCP             # Protocol to use (TCP/UDP)
+      port: 80                  # Port on the Service (ClusterIP) for internal traffic
+      targetPort: 8080          # Port on the Pod where the application is running
+      nodePort: 30007           # Specific NodePort to expose on all Nodes (optional; will be assigned if not specified)
