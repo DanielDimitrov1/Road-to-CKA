@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: my-namespace          # The name of the namespace
+  labels:
+    environment: production    # Label indicating the environment (production, staging, etc.)
+    purpose: app-isolation    # Label describing the purpose of the namespace
+  annotations:
+    owner: admin@example.com    # Annotation for identifying the namespace owner
+    description: "Namespace for isolating application resources"  # Additional information about the namespace
