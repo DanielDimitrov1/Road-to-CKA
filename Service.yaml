@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kubeapi-secrets  # Name of the Secret object
+  namespace: kube-system  # Namespace where the Secret will be stored (typically kube-system for API server)
+  labels:
+    app: kube-api  # Label identifying the related application (KubeAPI server in this case)
+    environment: production  # Label indicating the environment (e.g., production, dev)
+  annotations:
+    description: "Secrets for KubeAPI server authentication and access"  # Description of the Secret
+    createdBy: "admin"  # Annotations to indicate who created it and why
+type: Opaque  # Type of secret, Opaque is used for arbitrary key-value pairs
+data:
+  # Encoding sensitive data in base64 (this is an example; in real use, base64 encoding would be required)
+  api-server-cert: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7Mh9dGVjHVgg0gfg=="
+  api-server-key: "a29oZ2FpcnZnb3dpbnd3c3N3dGVxcGVya29ndXlnaXdoZG5nb3d0cA=="
+  kube-api-token: "a2x1Y2VwaS1pYS1zb2YtZXhwbGFpbmVkS3dvcHc5YTExODQ=="
+  
+  # The following are sensitive data and should be managed properly in a secure manner
+  kube-api-password: "U2VjdXJlUGFzc3dvcmQxMjM="  # Base64 encoded password (use Kubernetes Secrets or another secure way to handle passwords)
+  etcd-password: "R0o3tL9G4Z2P6zAm9nLvef48g=="
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubeapi-configmap  # ConfigMap to manage configuration alongside Secrets
+  namespace: kube-system  # Use the same namespace as the Secret for compatibility
+data:
+  api-server-args: |
+    # Example API server arguments for KubeAPI Server
+    --authorization-mode=RBAC  # Authorization mode to use (Role-based Access Control)
+    --secure-port=6443  # Secure port for Kubernetes API Server
+    --kubelet-client-certificate=/etc/kubernetes/pki/apiserver.crt  # Path to the certificate
+    --kubelet-client-key=/etc/kubernetes/pki/apiserver.key  # Path to the key file
+  
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-api-server  # Name of the API Server deployment
+  namespace: kube-system  # Typically deploy API server in the kube-system namespace
+spec:
+  replicas: 1  # Number of replicas (usually 1 for the API server)
+  selector:
+    matchLabels:
+      app: kube-api-server  # Ensure that the deployment targets the correct Pods
+  template:
+    metadata:
+      labels:
+        app: kube-api-server  # Labeling the Pods for easy identification
+    spec:
+      containers:
+      - name: kube-api-server-container  # Name of the container running the API server
+        image: k8s.gcr.io/kube-apiserver:v1.23.5  # Image version for the KubeAPI server
+        volumeMounts:
+        - name: secret-volume  # Mount the Secret into the container
+          mountPath: /etc/kubernetes/secrets  # Path inside the container
+          readOnly: true  # Make sure the Secret is mounted as read-only
+        - name: config-volume  # Mount the ConfigMap with API server args
+          mountPath: /etc/kubernetes/config
+          readOnly: true  # Make sure the ConfigMap is mounted as read-only
+      volumes:
+      - name: secret-volume  # Define a volume for mounting Secrets
+        secret:
+          secretName: kubeapi-secrets  # Reference to the Secret object
+      - name: config-volume  # Define a volume for mounting the ConfigMap
+        configMap:
+          name: kubeapi-configmap  # Reference to the ConfigMap object
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-apiserver  # Service to expose the API Server
+  namespace: kube-system  # Exposing within the kube-system namespace
+spec:
+  ports:
+  - port: 443  # The port the service listens on
+    targetPort: 6443  # The target port where the API server is running
+    protocol: TCP  # The communication protocol
+  selector:
+    app: kube-api-server  # Ensure the service targets the correct pods
