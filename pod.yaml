@@ -17,6 +17,10 @@ spec:
     - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
       name: kube-api-access-6plkc
       readOnly: true
+  nodeSelector:       # Constraint for selecting specific nodes
+    environment: production  # The key-value pair must match a label on the node
+    diskType: ssd           # Example: Ensures nodes have 'diskType=ssd' label
+      
   dnsPolicy: ClusterFirst
   enableServiceLinks: true
   nodeName: controlplane
