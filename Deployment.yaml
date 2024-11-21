@@ -1,22 +1,21 @@
-    apiVersion: apps/v1
-    kind: Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-deployment  # Name of the Deployment
+  labels:
+    app: myapp            # Label to identify the application
+    type: front-end        # Label indicating the type of the application
+spec:
+  replicas: 3             # Number of replicas (Pods) to create
+  selector:
+    matchLabels:          # Criteria to match Pods for this Deployment
+      type: front-end
+  template:               # Template for creating the Pods
     metadata:
-      name: myapp-deployment
       labels:
-        app: myapp
+        app: myapp        # Ensure the Pods have the same labels as the selector
         type: front-end
     spec:
-     template:
-        metadata:
-          name: myapp-pod
-          labels:
-            app: myapp
-            type: front-end
-        spec:
-         containers:
-         - name: nginx-container
-           image: nginx
-     replicas: 3
-     selector:
-       matchLabels:
-        type: front-end
+      containers:
+      - name: nginx-container
+        image: nginx       # Docker image for the container
