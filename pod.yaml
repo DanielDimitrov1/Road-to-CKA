@@ -10,13 +10,24 @@ spec:
   - image: kodekloud/simple-webapp-mysql
     imagePullPolicy: Always
     name: webapp
-    resources: {}
+    
+    #Note: Remember Requests and Limits for resources are set per container in the pod. 
+    resources:
+      requests:
+        memory: "1Gi"
+        cpu: "1"
+      limits:
+        memory: "2Gi"
+        cpu: "2"
     terminationMessagePath: /dev/termination-log
     terminationMessagePolicy: File
     volumeMounts:
     - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
       name: kube-api-access-6plkc
       readOnly: true
+      
+  # We add new property called Node Selector to the spec section and specify the label.
+  
   nodeSelector:       # Constraint for selecting specific nodes
     environment: production  # The key-value pair must match a label on the node
     diskType: ssd           # Example: Ensures nodes have 'diskType=ssd' label
@@ -44,8 +55,26 @@ spec:
     key: node.kubernetes.io/unreachable
     operator: Exists
     tolerationSeconds: 300
-  # Taints and Tolerations do not tell the pod to go to a particular node. Instead, they tell the node to only accept pods with certain tolerations.
-  
+
+
+# The primary feature of Node Affinity is to ensure that the pods are hosted on particular nodes. (With Node Selectors we cannot provide the advance expressions.)
+ affinity:
+   nodeAffinity:
+     requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: size
+            operator: In
+            values: 
+            - Large
+            - Medium
+# Available
+# requiredDuringSchedulingIgnoredDuringExecution
+# preferredDuringSchedulingIgnoredDuringExecution
+# Planned
+# requiredDuringSchedulingRequiredDuringExecution
+# preferredDuringSchedulingRequiredDuringExecution
+            
   volumes:
   - name: kube-api-access-6plkc
     projected:
@@ -65,54 +94,5 @@ spec:
               apiVersion: v1
               fieldPath: metadata.namespace
             path: namespace
-            
-      #THIS IS WHAT WE GET AS A RESULT !      
-      #THIS IS WHAT WE GET AS A RESULT !      
-      
-status:
-  conditions:
-  - lastProbeTime: null
-    status: "True"
-    type: PodReadyToStartContainers
-  - lastProbeTime: null
-    lastTransitionTime: "2024-11-20T13:44:48Z"
-    status: "True"
-    type: Initialized
-  - lastProbeTime: null
-    lastTransitionTime: "2024-11-20T13:44:54Z"
-    status: "True"
-    type: Ready
-  - lastProbeTime: null
-    lastTransitionTime: "2024-11-20T13:44:54Z"
-    status: "True"
-    type: ContainersReady
-  - lastProbeTime: null
-    lastTransitionTime: "2024-11-20T13:44:48Z"
-    status: "True"
-    type: PodScheduled
-  containerStatuses:
-  - containerID: containerd://865db2f9b6d071f75aa97a20d32d7035ce3d92c8e3035182925802ca4f1bdce3
-    image: docker.io/kodekloud/simple-webapp-mysql:latest
-    imageID: docker.io/kodekloud/simple-webapp-mysql@sha256:92943d2b3ea4a1db7c8a9529cd5786ae3b9999e0246ab665c29922e9800d1b41
-    lastState: {}
-    name: webapp
-    ready: true
-    restartCount: 0
-    started: true
-    state:
-      running:
-        startedAt: "2024-11-20T13:44:53Z"
-    volumeMounts:
-    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
-      name: kube-api-access-6plkc
-      readOnly: true
-      recursiveReadOnly: Disabled
-  hostIP: 192.168.243.184
-  hostIPs:
-  - ip: 192.168.243.184
-  phase: Running
-  podIP: 10.42.0.9
-  podIPs:
-  - ip: 10.42.0.9
-  qosClass: BestEffort
-  startTime: "2024-11-20T13:44:48Z"
+   
+  
