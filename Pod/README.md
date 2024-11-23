@@ -7,3 +7,8 @@
 
 
 - kubectl describe pod blue | grep Containers -A 10 <br />
+
+- kubectl -n elastic-stack logs kibana <br />
+
+
+
