@@ -36,6 +36,8 @@ spec:
         
     terminationMessagePath: /dev/termination-log
     terminationMessagePolicy: File
+
+# adding volume for storing logs (monitoring purpose)
     volumeMounts:
     - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
       name: kube-api-access-6plkc
