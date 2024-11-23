@@ -54,12 +54,6 @@ data:                       # Simple key-value pairs, storing basic app configur
     export DB_PORT=5432  # Database port environment variable
     export DB_USER=dbadmin  # Database user environment variable
   
-  # A simple text file containing configuration options
-  settings.txt: |
-    # Example settings file
-    option1=true  # Setting option 1 to true
-    option2=false  # Setting option 2 to false
-    option3=42  # Setting option 3 to 42
 
 # Define volume mount example, showing how to use the ConfigMap in a Pod
 ---
