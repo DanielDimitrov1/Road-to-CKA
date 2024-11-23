@@ -5,12 +5,12 @@ metadata:
     name: webapp-pod
   name: webapp-pod
   namespace: default
+
 spec:
   containers:
-  - image: kodekloud/simple-webapp-mysql
+  - name: webapp
+    image: kodekloud/simple-webapp-mysql
     imagePullPolicy: Always
-    name: webapp
-    
     #Note: Remember Requests and Limits for resources are set per container in the pod. 
     resources:
       requests:
@@ -19,7 +19,6 @@ spec:
       limits:
         memory: "2Gi"
         cpu: "2"
-
 # ENVIRONMENT VARIABLES
 # simple env var
     env:
@@ -42,7 +41,10 @@ spec:
     - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
       name: kube-api-access-6plkc
       readOnly: true
+# END OF THE CONTAINER
+# END OF THE CONTAINER
 
+# INIT CONTAINER
   initContainers:
   - name: init-myservice
     image: busybox:1.28
@@ -50,9 +52,9 @@ spec:
 
   # We add new property called Node Selector to the spec section and specify the label.
   
-  nodeSelector:       # Constraint for selecting specific nodes
+  nodeSelector:              # Constraint for selecting specific nodes
     environment: production  # The key-value pair must match a label on the node
-    diskType: ssd           # Example: Ensures nodes have 'diskType=ssd' label
+    diskType: ssd            # Example: Ensures nodes have 'diskType=ssd' label
       
   dnsPolicy: ClusterFirst
   enableServiceLinks: true
