@@ -1,1 +1,3 @@
-# Road-to-CKA
+# Commands
+
+kubectl rollout status deployment/nginx-deployment < b/ >
