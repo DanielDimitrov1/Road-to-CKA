@@ -11,9 +11,9 @@
 
 ## Rollout deployment
 
-- kubectl set image deployment/myapp-deployment nginx=nginx:1.9.1 <br />
-- kubectl create deployment --help <br />
-- kubectl rollout status deployment/myapp-deployment <br /> 
-- kubectl rollout history deployment/myapp-deployment <br />
-- kubectl rollout undo deployment/myapp-deployment <br />
+- kubectl **set** image deployment/myapp-deployment nginx=nginx:1.9.1 <br />
+- kubectl **create** deployment --help <br />
+- kubectl rollout **status** deployment/myapp-deployment <br /> 
+- kubectl rollout **history** deployment/myapp-deployment <br />
+- kubectl rollout **undo** deployment/myapp-deployment <br />
 
