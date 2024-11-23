@@ -10,5 +10,5 @@
 
 - kubectl -n elastic-stack logs kibana <br />
 
-
-
+## logging into container to see the container
+- kubectl -n elastic-stack exec -it app -- cat /log/app.log 
