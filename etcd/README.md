@@ -17,4 +17,6 @@ etcd.service
 
 # Default
 kubectl get pods -n kube-system
+
+
 kubectl exec -it --namespace kube-system etcd-minikube sh
