@@ -16,7 +16,6 @@ etcd.service
 --initial-cluster controller-0=https://${CONTROLLER0_IP}:2380,controller-1=https://${CONTROLLER1_IP}:2380 \\
 
 # Default
-kubectl get pods -n kube-system
-
-
-kubectl exec -it --namespace kube-system etcd-minikube sh
+kubectl get pods -n kube-system <br />
+kubectl exec -it --namespace kube-system etcd-minikube sh <br />
+docker exec -it minikube  /bin/bash
