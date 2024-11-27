@@ -11,5 +11,5 @@ spec:
   ports:
     - protocol: TCP             # Protocol to use (TCP/UDP)
       port: 80                  # Port on the Service (ClusterIP) for internal traffic
-      targetPort: 8080          # Port on the Pod where the application is running
+      targetPort: 8080          # Port on the Pod where the application is running  (default: 30000-32767)
       nodePort: 30007           # Specific NodePort to expose on all Nodes (optional; will be assigned if not specified)
