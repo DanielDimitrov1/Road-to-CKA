@@ -15,3 +15,6 @@
 - kubectl rollout **history** deployment/myapp-deployment <br />
 - kubectl rollout **undo** deployment/myapp-deployment <br />
 
+
+# Tips
+use a paths to the volume when deploying a volume.
