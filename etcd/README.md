@@ -6,6 +6,8 @@ wget -q --https-only "https://github.com/coreos/etcd/releases/download/v3.3.9/et
 
 
 ## installing etcdctl command (like kubectl)
+https://linuxconfig.org/how-to-install-etcd-on-ubuntu 
+
 1. curl -L https://github.com/etcd-io/etcd/releases/download/v3.3.11/etcdv3.3.11-linux-amd64.tar.gz -o etcd-v3.3.11-linux-amd64.tar.gz
 2. tar xzvf etcd-v3.3.11-linux-amd64.tar.gz
 3. ./etcd
