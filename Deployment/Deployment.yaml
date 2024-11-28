@@ -10,12 +10,25 @@ spec:
   selector:
     matchLabels:          # Criteria to match Pods for this Deployment
       type: front-end
-  template:               # Template for creating the Pods
+  strategy:
+    type: Recreate        # advanced approach, creates a new pod and after which to attach the volume on it.
+  template:               
     metadata:
       labels:
         app: myapp        # Ensure the Pods have the same labels as the selector
         type: front-end
     spec:
       containers:
-      - name: nginx-container
-        image: nginx       # Docker image for the container
+      - name: grafana
+        image: grafana/grafana:8.3.3
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: storage
+          mountPath: /var/lib/grafana
+        ports:
+        - containerPort: 3000
+      volumes:
+      - name: storage
+        persistentVolumeClaim:
+          claimName: grafana
+        
