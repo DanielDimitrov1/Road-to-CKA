@@ -30,5 +30,5 @@ spec:
       volumes:
       - name: storage
         persistentVolumeClaim:
-          claimName: grafana
+          claimName: rest-api-data # this is for the other file
         
