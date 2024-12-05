@@ -9,7 +9,7 @@
 # ClusterRoleBinding Role: storage-admin
 
 # Commands:
-    
+# kubectl api-resources
 
 ---
     kind: ClusterRole

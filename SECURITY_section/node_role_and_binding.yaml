@@ -1,5 +1,8 @@
 # A new user michelle joined the team. She will be focusing on the nodes in the cluster. Create the required ClusterRoles and ClusterRoleBindings so she gets access to the nodes.
 
+# Commands
+# kubectl create clusterrolebinding --help
+# kubectl create clusterrolebinding michelle-role-binding --clusterrole=michelle-role --user=michelle
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
