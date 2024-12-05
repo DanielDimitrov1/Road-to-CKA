@@ -1,0 +1,38 @@
+#Edit the pod ubuntu-sleeper to run the sleep process with user ID 1010.
+
+kind: Pod
+metadata:
+  name: ubuntu-sleeper
+  namespace: default
+spec:
+  securityContext:
+    runAsUser: 1010
+  containers:
+
+
+# Update pod ubuntu-sleeper to run as Root user and with the SYS_TIME capability.
+# Pod Name: ubuntu-sleeper
+# Image Name: ubuntu
+# SecurityContext: Capability SYS_TIME
+# Is run as a root user?
+
+# Now update the pod to also make use of the NET_ADMIN capability.
+
+
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ubuntu-sleeper
+  namespace: default
+spec:
+  containers:
+  - command:
+    - sleep
+    - "4800"
+    image: ubuntu
+    name: ubuntu-sleeper
+    securityContext:
+      capabilities:
+        add: ["SYS_TIME", "NET_ADMIN"]
