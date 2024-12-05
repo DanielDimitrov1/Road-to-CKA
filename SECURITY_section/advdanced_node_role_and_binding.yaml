@@ -10,6 +10,8 @@
 
 # Commands:
 # kubectl api-resources
+# kubectl create clusterrole storage-admin --resource=persistentvolumes,storageclasses --verb=list,create,get,watch
+# kubectl create clusterrolebinding michelle-storage-admin --user=michelle --clusterrole=storage-admin
 
 ---
     kind: ClusterRole

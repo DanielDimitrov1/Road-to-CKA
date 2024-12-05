@@ -8,3 +8,4 @@ Modules covered in this section:
 6. **Authorization**
     - **RBAC:**  - Pod Role and RoleBinding
                  - Cluster Role and RoleBinding
+                 - Service Account (  exporting tokens using secrets )
