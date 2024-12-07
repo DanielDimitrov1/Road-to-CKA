@@ -6,6 +6,6 @@ Modules covered in this section:
 4. **KubeConfig: (/root/.kube/config)**
 5. **API Groups: /apps  /networking.k8s.io  /certificates.k8s.io**
 6. **Authorization**
-    - **RBAC:**  - Pod Role and RoleBinding
-                 - Cluster Role and RoleBinding
-                 - Service Account (  exporting tokens using secrets )
+    - **RBAC:**  - Pod Role and RoleBinding <br />
+                 - Cluster Role and RoleBinding <br />
+                 - Service Account (  exporting tokens using secrets ) <br />
